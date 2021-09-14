@@ -141,3 +141,16 @@
 (define (character-count alist) 
    (cond [(empty? alist)  0 ]
          [(cons? alist)  (+ (string-length (first alist))(character-count (rest alist)))]))
+
+;6
+
+;; numeric-strings : ListOfString -> ListOfString
+;  consumes a ListOfString and produces a ListOfString that contains only those strings from the original list that consist entirely of numeric characters
+
+;(numeric-strings (cons "123" (cons "abc" (cons "456" (cons "789" empty)))))
+
+(define (numeric-strings list)
+  (cond [(empty? (first list)) list]
+        [(string-numeric? (first list)) (numeric-strings (cons (first list) (rest list)))]
+        [else (cons (rest list))]))
+        

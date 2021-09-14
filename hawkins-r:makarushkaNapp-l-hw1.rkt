@@ -11,7 +11,7 @@
 
 (define KATRINA (make-hurricane "Katrina" 5 175 50 "NW"))
 
-(define-struct thunderstorm (inche s-of-rainfall maximum-wind-gust velocity heading))
+(define-struct thunderstorm (inches-of-rainfall maximum-wind-gust velocity heading))
 
 ;;a thunderstorm is a (make-thunderstorm Natural Natural Natural String)
 ;; interp:  represents a thunderstorm constrictor where
@@ -124,7 +124,7 @@
 
    (cond [(hurricane? a-storm) (make-hurricane (hurricane-name a-storm) (hurricane-category a-storm) (hurricane-maximum-sustained-winds a-storm) (hurricane-velocity a-storm) new-heading)]
          [(thunderstorm? a-storm) (make-thunderstorm (thunderstorm-inches-of-rainfall a-storm) (thunderstorm-maximum-wind-gust a-storm) (thunderstorm-velocity a-storm) new-heading)]                             
-         [(fire? a-storm) (make-fire (fire-square-miles a-storm) (fire-number-of-days a-storm) (fire-people-displaced a-storm))]))
+         [(fire? a-storm) a-storm]))
 
 ;5
 
@@ -142,38 +142,39 @@
    (cond [(empty? alist)  0 ]
          [(cons? alist)  (+ (string-length (first alist))(character-count (rest alist)))]))
 
-
 ;6
 
 ;; numeric-strings : ListOfString -> ListOfString
 ;  consumes a ListOfString and produces a ListOfString that contains only those strings from the original list that consist entirely of numeric characters
 
+(check-expect (numeric-strings empty) empty)
+(check-expect (numeric-strings (cons "123" (cons "abc" (cons "456" (cons "789" empty))))) (cons "123" (cons "456" (cons "789" empty))))
+(check-expect (numeric-strings (cons "asda123" (cons "abc4623" (cons "asudh456" (cons "dabsd789" empty))))) empty)
+(check-expect (numeric-strings (cons "123" (cons "456" (cons "789" empty)))) (cons "123" (cons "456" (cons "789" empty))))
+(check-expect (numeric-strings THREELIST) empty)
 
-;(check-expect (numeric-strings (cons "123" (cons "abc" (cons "456" (cons "789" empty)))))(numeric-strings (cons "123" (cons "456" (cons "789" empty)))))
+(define (numeric-strings alist)
+  (cond [(empty? alist) empty]
+        [(cons? alist) (if (string-numeric? (first alist))
+                                (cons (first alist) (numeric-strings (rest alist)))
+                                (numeric-strings (rest alist)))]))
 
-(define (numeric-strings list)
-  (cond [(empty? (first list)) list]
-        [(string-numeric? (first list)) (numeric-strings (cons (first list) (rest list)))]
-        [else (cons (rest list))]))
+
 ;7
 
-;; a ListOfNumber is one of
+;;; a ListOfNatural is one of
 ;;   empty
-;;   (cons Number ListOfNumber)
+;;   (cons Natural ListOfNatural)
 
 ;;lengths-of-strings :  ListOfString -> ListOfNatural
 ;consumes a ListOfString and produces a ListOfNatural. The function produces a list of the lengths of each of the strings in the given ListOfString.
 
-
-;(cons 5 (cons 6 (cons 11 '())))
-
 (check-expect (lengths-of-strings empty) empty)
-(check-expect (lengths-of-strings ONELIST) )
-(check-expect (lengths-of-strings TWOLIST) empty)
-(check-expect (lengths-of-strings THREELSIT) empty)
+(check-expect (lengths-of-strings ONELIST) (cons 3 '()))
+(check-expect (lengths-of-strings TWOLIST) (cons 11 (cons 8 '())))
+(check-expect (lengths-of-strings THREELIST) (cons 5 (cons 6 (cons 11 '()))))
 
 
 (define (lengths-of-strings alist) 
    (cond [(empty? alist)  empty]
          [(cons? alist)   (cons (string-length (first alist)) (lengths-of-strings(rest alist)))]))
-

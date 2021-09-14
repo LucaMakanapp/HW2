@@ -11,7 +11,7 @@
 
 (define KATRINA (make-hurricane "Katrina" 5 175 50 "NW"))
 
-(define-struct thunderstorm (inches-of-rainfall maximum-wind-gust velocity heading))
+(define-struct thunderstorm (inche s-of-rainfall maximum-wind-gust velocity heading))
 
 ;;a thunderstorm is a (make-thunderstorm Natural Natural Natural String)
 ;; interp:  represents a thunderstorm constrictor where
@@ -39,9 +39,6 @@
 ; fire
 
 
-
-
-
 ;2.
 ; (define(hurricane-fcn a-hurricane)
 ; ...(hurricane-name a-hurricane)
@@ -65,7 +62,10 @@
 ;    (fire-people-displaced a-fire)
 
 
-; NEED STORM TEMPLATE
+; (define(storm-fcn a-storm)
+;   (cond [(hurricane? a-storm)(hurricane-fcn a-storm...)                     
+;         [(thunderstorm? a-storm)  
+;         [(fire? a-storm)  
 
 
 
@@ -142,6 +142,7 @@
    (cond [(empty? alist)  0 ]
          [(cons? alist)  (+ (string-length (first alist))(character-count (rest alist)))]))
 
+
 ;6
 
 ;; numeric-strings : ListOfString -> ListOfString
@@ -154,3 +155,25 @@
   (cond [(empty? (first list)) list]
         [(string-numeric? (first list)) (numeric-strings (cons (first list) (rest list)))]
         [else (cons (rest list))]))
+;7
+
+;; a ListOfNumber is one of
+;;   empty
+;;   (cons Number ListOfNumber)
+
+;;lengths-of-strings :  ListOfString -> ListOfNatural
+;consumes a ListOfString and produces a ListOfNatural. The function produces a list of the lengths of each of the strings in the given ListOfString.
+
+
+;(cons 5 (cons 6 (cons 11 '())))
+
+(check-expect (lengths-of-strings empty) empty)
+(check-expect (lengths-of-strings ONELIST) )
+(check-expect (lengths-of-strings TWOLIST) empty)
+(check-expect (lengths-of-strings THREELSIT) empty)
+
+
+(define (lengths-of-strings alist) 
+   (cond [(empty? alist)  empty]
+         [(cons? alist)   (cons (string-length (first alist)) (lengths-of-strings(rest alist)))]))
+
